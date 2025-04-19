@@ -1,0 +1,6 @@
+*.log
+.env*;C/
+*.tmp
+vendor/
+node_modules/
+storage/logs/

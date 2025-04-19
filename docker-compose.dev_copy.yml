@@ -1,0 +1,52 @@
+services:
+  # ────────────────────────────────
+  # MySQL for local testing
+  # ────────────────────────────────
+  db:
+    image: mysql:8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: jupitermeet
+      MYSQL_USER: jmuser
+      MYSQL_PASSWORD: jmpass
+    volumes:
+      - db_data:/var/lib/mysql
+    networks: [jupiter-net]
+
+  # ────────────────────────────────
+  # Laravel + Apache (pre‑built image)
+  # ────────────────────────────────
+  web:
+    image: dev.kimidev.com/kimicom/jupitermeetpro-docker/web:1.8.6-prod          # ← uses the image you built
+    ports:
+      - "3000:80"
+    volumes:
+      # - ./jupitermeet_pro/.env:/var/www/html/.env:rw
+      - ./jupitermeet_pro:/var/www/html:rw
+      - jupitermeet_storage:/var/www/html/storage
+    depends_on: [db]
+    networks: [jupiter-net]
+
+  # ────────────────────────────────
+  # Node signalling server (pre‑built)
+  # ────────────────────────────────
+  node:
+    image: jm-node:dev          # ← uses the image you built
+    command: npm run local      # HTTP mode, no TLS for dev
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./jupitermeet_pro/server/.env.local:/app/.env:ro
+    depends_on: [db]
+    networks: [jupiter-net]
+
+# ────────────────────────────────
+# Shared network & volume
+# ────────────────────────────────
+networks:
+  jupiter-net:
+    driver: bridge
+
+volumes:
+  db_data:
+  jupitermeet_storage:
