@@ -1,26 +1,46 @@
 services:
+  db:
+    image: mysql:8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE:      "${DB_DATABASE}"
+      MYSQL_USER:          "${DB_USERNAME}"
+      MYSQL_PASSWORD:      "${DB_PASSWORD}"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks: [jupiter-net]
+
   web:
-    image: registry.kimihost.com/jupitermeet-web:1.8.6-fix
+    image: dev.kimidev.com/kimicom/jupitermeetpro-docker/web-artisan:1.8.6-artisan-fx
     restart: unless-stopped
     ports:
-      - "3000:80"
-    # In prod you may mount a read‑only .env.prod here:
-    # volumes:
-    #  - ./jupitermeet_pro/.env.prod:/var/www/html/.env:ro
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    depends_on: [node]
+      - "3000:80"                       # host:container
+    volumes:
+      - ./jupitermeet_pro/.env:/var/www/html/.env:ro
+      - jupitermeet_storage:/var/www/html/storage
+    # NO command override here!  Let the image’s ENTRYPOINT start Apache.
+    depends_on:
+      - db
+    networks:
+      - jupiter-net
 
   node:
-    image: registry.kimihost.com/jupitermeet-node:1.8.6-fix
+    image: dev.kimidev.com/kimicom/jupitermeetpro-docker/node:1.8.6-prod
     restart: unless-stopped
     ports:
       - "9000:9000"
-    # volumes:
-    #  - ./jupitermeet_pro/server/.env.prod:/app/.env:ro
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./jupitermeet_pro/server/.env:/app/.env:ro
+    command: ["npm", "run", "local"]   # HTTP-only mode
+    depends_on:
+      - db
+    networks:
+      - jupiter-net
 
 networks:
-  default:
+  jupiter-net:
     driver: bridge
+
+volumes:
+  db_data:
+  jupitermeet_storage:

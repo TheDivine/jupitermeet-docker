@@ -13,4 +13,4 @@ COPY jupitermeet_pro/server/ /app/
 RUN npm install --omit=dev --legacy-peer-deps
 
 EXPOSE 9000
-CMD ["npm", "run", "live"]
+CMD ["node", "app.js"]

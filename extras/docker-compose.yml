@@ -1,0 +1,26 @@
+services:
+  web:
+    image: registry.kimihost.com/jupitermeet-web:1.8.6-fix
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    # In prod you may mount a read‑only .env.prod here:
+    # volumes:
+    #  - ./jupitermeet_pro/.env.prod:/var/www/html/.env:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on: [node]
+
+  node:
+    image: registry.kimihost.com/jupitermeet-node:1.8.6-fix
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    # volumes:
+    #  - ./jupitermeet_pro/server/.env.prod:/app/.env:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  default:
+    driver: bridge

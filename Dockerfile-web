@@ -15,10 +15,11 @@ RUN a2enmod rewrite \
 
 WORKDIR /var/www/html
 COPY jupitermeet_pro/ /var/www/html/
-RUN mkdir -p storage/license \
- && chown -R www-data:www-data storage/license
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+# ← this makes storage always writable by www-data
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 80
 CMD ["apache2-foreground"]
