@@ -1,11 +1,11 @@
-# Ignore secrets and artefacts
-env/
-db_data/
-*.pem
-*.key
-*.crt
-jupitermeet_pro/.env
-jupitermeet_pro/server/.env
+# # Ignore secrets and artefacts
+# env/
+# db_data/
+# *.pem
+# *.key
+# *.crt
+# jupitermeet_pro/.env
+# jupitermeet_pro/server/.env
 node_modules/
-vendor/
-storage/
+# vendor/
+# storage/
