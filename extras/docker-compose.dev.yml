@@ -35,6 +35,7 @@ services:
     command: npm run local      # HTTP mode, no TLS for dev
     ports:
       - "9000:9000"
+      - "${RTC_MIN_PORT}-${RTC_MAX_PORT}:${RTC_MIN_PORT}-${RTC_MAX_PORT}/udp"
     volumes:
       - ./jupitermeet_pro/server/.env.local:/app/.env:ro
     depends_on: [db]

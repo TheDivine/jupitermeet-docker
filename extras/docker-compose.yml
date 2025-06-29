@@ -16,6 +16,7 @@ services:
     restart: unless-stopped
     ports:
       - "9000:9000"
+      - "${RTC_MIN_PORT}-${RTC_MAX_PORT}:${RTC_MIN_PORT}-${RTC_MAX_PORT}/udp"
     # volumes:
     #  - ./jupitermeet_pro/server/.env.prod:/app/.env:ro
     extra_hosts:
