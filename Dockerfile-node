@@ -12,5 +12,7 @@ COPY jupitermeet_pro/server/ /app/
 # still use npm install (ci) with tolerance for peer deps
 RUN npm install --omit=dev --legacy-peer-deps
 
-EXPOSE 9000
+# Signalling server port
+EXPOSE 9007
+# Mediasoup uses a large UDP port range exposed via docker-compose
 CMD ["node", "app.js"]

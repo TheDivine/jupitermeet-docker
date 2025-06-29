@@ -20,7 +20,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-node
-    ports: ["9000:9000"]
+    ports:
+      - "9007:9007"
+      - "10000-59999:10000-59999/udp"
 
 networks:
   default:
