@@ -28,7 +28,10 @@ services:
     image: dev.kimidev.com/kimicom/jupitermeetpro-docker/node:1.8.6-prod
     restart: unless-stopped
     ports:
-      - "9000:9000"
+      # Match the signalling server's PORT from server/.env
+      - "9007:9007"
+      # Expose mediasoup UDP range for WebRTC
+      - "10000-59999:10000-59999/udp"
     volumes:
       - ./jupitermeet_pro/server/.env:/app/.env:ro
     command: ["npm", "run", "local"]   # HTTP-only mode
