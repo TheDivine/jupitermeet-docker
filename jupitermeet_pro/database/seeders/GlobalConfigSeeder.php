@@ -42,7 +42,7 @@ class GlobalConfigSeeder extends Seeder
 
     GlobalConfig::create([
       'key' => 'SIGNALING_URL',
-      'value' => 'https://yourdomain.in:9007'
+      'value' => 'https://yourdomain.in:9000'
     ]);
 
     GlobalConfig::create([
